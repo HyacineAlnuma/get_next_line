@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 11:30:01 by halnuma           #+#    #+#             */
-/*   Updated: 2024/11/25 16:13:17 by halnuma          ###   ########.fr       */
+/*   Updated: 2024/11/26 12:25:22 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@
 char	*get_next_line(int fd)
 {
 	//static t_gnl	*gnl;
-	static char	*buffer;
+	static char	*rest;
 	char *res;
 
 	//gnl = malloc(sizeof(t_gnl));
@@ -89,27 +89,32 @@ char	*get_next_line(int fd)
 	// if (!gnl->str)
 	// 	return (NULL);
 	// printf("%s\n", gnl->str);
-	res = get_lines(fd, buffer);
+	if (BUFFER_SIZE <= 0 || !fd)
+		return (NULL);
+	res = get_lines(fd, rest);
 	if (!res)
 		return (NULL);
-	printf("%s", res);
-	res = get_lines(fd, buffer);
-	printf("%s", res);
-	res = get_lines(fd, buffer);
-	printf("%s", res);
+	free(rest);
+	// printf("%s", res);
+	// res = get_lines(fd, rest);
+	// free(rest);
+	// printf("%s", res);
+	// res = get_lines(fd, rest);
+	// free(rest);
+	// printf("%s", res);
 	return (res);
 }
 
-int	main(int ac, char**av)
-{
-	int fd;
+// int	main(int ac, char**av)
+// {
+// 	int fd;
 
-	(void)ac;
-	fd = open(av[1], O_RDONLY);
-	if (fd < 0)
-	{
-		write(2, "File error\n", 11);
-		return (0);
-	}
-	get_next_line(fd);
-}
+// 	(void)ac;
+// 	fd = open(av[1], O_RDONLY);
+// 	if (fd < 0)
+// 	{
+// 		write(2, "File error\n", 11);
+// 		return (0);
+// 	}
+// 	get_next_line(fd);
+// }
