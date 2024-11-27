@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 11:30:28 by halnuma           #+#    #+#             */
-/*   Updated: 2024/11/26 11:13:42 by halnuma          ###   ########.fr       */
+/*   Updated: 2024/11/27 13:58:09 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE	1
+#  define BUFFER_SIZE	42
 # endif
 
 # include <stdlib.h>
@@ -30,12 +30,14 @@ typedef struct s_gnl
 	int		start;
 }	t_gnl;
 
-char	*get_lines(int fd, char *rest);
+char	*get_lines(int fd);
 char	*get_next_line(int fd);
-char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strjoin(char *s1, char *s2);
 void	ft_bzero(void *s, size_t n);
 void	*ft_calloc(size_t nmemb, size_t size);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
-size_t	get_size(char const *s, unsigned int start, size_t len);
+char	*ft_substr(char *s, unsigned int start, size_t len);
+size_t	get_size(char *s, unsigned int start, size_t len);
+size_t	ft_strlen(char *s);
+size_t	ft_strlcpy(char *dst, char *src, size_t size);
 
 #endif

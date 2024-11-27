@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 11:30:14 by halnuma           #+#    #+#             */
-/*   Updated: 2024/11/26 12:28:22 by halnuma          ###   ########.fr       */
+/*   Updated: 2024/11/27 17:51:40 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,43 +40,60 @@ void	ft_bzero(void *s, size_t n)
 	}
 }
 
-char	*get_lines(int fd, char *rest)
+char	*get_lines(int fd)
 {
 	char		*res;
 	int			readed;
 	int			i;
 	char		*buffer;
+	char		*temp;
+	static char *rest;
 
 	buffer = ft_calloc(sizeof(char), (BUFFER_SIZE + 1));
 	if (!buffer)
 		return (NULL);
 	readed = 1;
 	i = 0;
-	res = "";
+	res = NULL;
+	//printf("%s", rest);
 	if (rest)
 	{
-		free(buffer);
-		buffer = rest;
+		// printf("%s\n", rest);
+		//printf("%s", rest);
+		ft_strlcpy(buffer, rest, BUFFER_SIZE);
+		//printf("%s", buffer);
 		while (buffer[i])
 		{
 			if (buffer[i] == '\n')
 			{
-				rest = ft_substr(buffer, (i + 1), BUFFER_SIZE);
-				if (!rest)
+				free(rest);
+				rest = NULL;
+				if (buffer[i + 1])
 				{
-					free(buffer);
-					return (NULL);
+					//rest = NULL;
+					rest = ft_substr(buffer, (i + 1), BUFFER_SIZE);
+					if (!rest)
+					{
+						free(res);
+						free(buffer);
+						return (NULL);
+					}
 				}
+				buffer[i + 1] = '\0';
 				res = ft_strjoin(res, buffer);
 				if (!res)
 				{
 					free(buffer);
 					return (NULL);
 				}
+				free(buffer);
+				//printf("%s", rest);
 				return (res);
 			}
 			i++;
 		}
+		free(rest);
+		rest = NULL;
 		res = ft_strjoin(res, buffer);
 		if (!res)
 		{
@@ -84,13 +101,26 @@ char	*get_lines(int fd, char *rest)
 			return (NULL);
 		}
 	}
-	while (readed)
+	while (1)
 	{
+		ft_bzero(buffer, BUFFER_SIZE);
 		readed = read(fd, buffer, BUFFER_SIZE);
-		if (readed <= 0)
+		//printf("%s\n", buffer);
+		if (readed < 0)
+		{
+			if (res)
+				free(res);
+			if (rest)
+				free(rest);
+			free(buffer);
+			// if (res)
+			// 	return (res);
+			return (NULL);
+		}
+		if (readed == 0)
 		{
 			free(buffer);
-			if (*res)
+			if (res)
 				return (res);
 			return (NULL);
 		}
@@ -101,64 +131,76 @@ char	*get_lines(int fd, char *rest)
 			{
 				if (buffer[i + 1])
 				{
+					if (rest)
+						free(rest);
 					rest = ft_substr(buffer, (i + 1), BUFFER_SIZE);
+					//printf("%s", rest);
 					if (!rest)
 					{
-						free(buffer);
-						return (NULL);
-					}
-					buffer[i + 1] = '\0';
-					res = ft_strjoin(res, buffer);
-					if (!res)
-					{
+						free(res);
 						free(buffer);
 						return (NULL);
 					}
 				}
-				free(buffer);
-				return (res);
-			}
-			if (readed < BUFFER_SIZE)
-			{
-				// rest = ft_substr(buffer, (i + 1), BUFFER_SIZE);
-				// if (!rest)
-				// {
-				// 	free(buffer);
-				// 	return (NULL);
-				// }
-				// printf("yo");
-				// printf("%s", buffer);
-				// buffer[readed] = '\0';
-				if (readed)
+				buffer[i + 1] = '\0';
+				temp = res;
+				// printf("%s", rest);
+				// printf("-----");
+				res = ft_strjoin(res, buffer);
+				//printf("%s", res);
+				// printf("-----");
+				if (temp)
+					free(temp);
+				if (!res)
 				{
-					res = ft_strjoin(res, buffer);
-					if (!res)
-					{
-						free(buffer);
-						return (NULL);
-					}
+					free(buffer);
+					return (NULL);
 				}
+				//free(rest);
 				free(buffer);
 				return (res);
 			}
 			i++;
 		}
-		if (readed == BUFFER_SIZE)
+		temp = res;
+		res = ft_strjoin(res, buffer);
+		if (temp)
+			free(temp);
+		if (!res)
 		{
-			res = ft_strjoin(res, buffer);
-			if (!res)
-			{
-				free(buffer);
-				return (NULL);
-			}
-			//free(buffer);
+			free(rest);
+			return (NULL);
+		}
+		if (readed < BUFFER_SIZE)
+		{
+			free(rest);
+			free(buffer);
+			return (res);
 		}
 	}
 	free(buffer);
 	return (res);
 }
 
-size_t	ft_strlen(const char *s)
+size_t	ft_strlcpy(char *dst, char *src, size_t size)
+{
+	size_t	i;
+	size_t	src_len;
+
+	src_len = ft_strlen(src);
+	i = 0;
+	if (size == 0)
+		return (src_len);
+	while (src[i] && i < (size - 1))
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (src_len);
+}
+
+size_t	ft_strlen(char *s)
 {
 	size_t	i;
 
@@ -168,25 +210,43 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	size_t	size;
 	char	*res;
 	size_t	i;
+	size_t	j;
+	size_t s1_size;
 
-	size = ft_strlen(s1) + ft_strlen(s2) + 1;
-	res = (char *)ft_calloc(sizeof(char), (size + 1));
+	s1_size = 0;
+	if (s1)
+		s1_size = ft_strlen(s1);
+	size = s1_size + ft_strlen(s2) + 1;
+	res = (char *)ft_calloc(sizeof(char), size);
 	if (!res)
 		return (NULL);
 	i = 0;
-	while (*s1)
-		res[i++] = *s1++;
-	while (*s2)
-		res[i++] = *s2++;
+	j = 0;
+	if (s1)
+	{
+		while (s1[j])
+		{
+			res[i] = s1[j];
+			i++;
+			j++;
+		}
+	}
+	j = 0;
+	while (s2[j])
+	{
+		res[i] = s2[j];
+		i++;
+		j++;
+	}
 	return (res);
 }
 
-size_t	get_size(char const *s, unsigned int start, size_t len)
+size_t	get_size(char *s, unsigned int start, size_t len)
 {
 	size_t	size;
 
@@ -199,7 +259,7 @@ size_t	get_size(char const *s, unsigned int start, size_t len)
 	return (size);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr(char *s, unsigned int start, size_t len)
 {
 	size_t	i;
 	size_t	j;
