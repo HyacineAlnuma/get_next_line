@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 11:30:01 by halnuma           #+#    #+#             */
-/*   Updated: 2024/12/02 10:09:09 by halnuma          ###   ########.fr       */
+/*   Updated: 2024/12/02 10:30:17 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,25 +110,3 @@ char	*shift_buffer(char *buffer, int i)
 		buffer[j++] = '\0';
 	return (buffer);
 }
-
-// int	main(int ac, char**av)
-// {
-// 	int fd;
-// 	char	*line;
-
-// 	(void)ac;
-// 	//(void)av;
-// 	fd = open(av[1], O_RDONLY);
-// 	line = get_next_line(fd);
-// 	printf("%s", line);
-// 	free(line);
-// 	line = get_next_line(fd);
-// 	printf("%s", line);
-// 	free(line);
-// 	// line = get_next_line(fd);
-// 	// printf("%s", line);
-// 	// free(line);
-// 	// line = get_next_line(fd);
-// 	// printf("%s", line);
-// 	//free(line);
-// }
