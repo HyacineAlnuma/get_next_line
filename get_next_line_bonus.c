@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 11:30:01 by halnuma           #+#    #+#             */
-/*   Updated: 2024/12/02 10:03:33 by halnuma          ###   ########.fr       */
+/*   Updated: 2024/12/02 10:09:09 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*get_next_line(int fd)
 {
-	static char	buffer[BUFFER_SIZE + 1];
+	static char	buffer[MAX_FD][BUFFER_SIZE + 1];
 	int			nl;
 	char		*line;
 
@@ -22,16 +22,16 @@ char	*get_next_line(int fd)
 		return (NULL);
 	nl = 0;
 	line = NULL;
-	if (ft_strlen(buffer) > 0)
+	if (ft_strlen(buffer[fd]) > 0)
 	{
-		nl = check_if_nl(buffer);
-		line = process_buffer(line, buffer);
+		nl = check_if_nl(buffer[fd]);
+		line = process_buffer(line, buffer[fd]);
 		if (!line)
 			return (NULL);
 	}
 	if (!nl)
 	{
-		line = next_line(fd, line, buffer, nl);
+		line = next_line(fd, line, buffer[fd], nl);
 		if (!line)
 			return (NULL);
 	}
