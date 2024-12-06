@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 11:30:28 by halnuma           #+#    #+#             */
-/*   Updated: 2024/12/02 10:07:51 by halnuma          ###   ########.fr       */
+/*   Updated: 2024/12/06 09:32:15 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@
 
 # include <stdlib.h>
 # include <unistd.h>
-# include <fcntl.h>
-# include <stdio.h>
 # include <stdint.h>
 
 char	*next_line(int fd, char *line, char *buffer, int nl);

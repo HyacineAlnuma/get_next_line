@@ -6,22 +6,20 @@
 /*   By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 11:30:28 by halnuma           #+#    #+#             */
-/*   Updated: 2024/12/02 10:03:38 by halnuma          ###   ########.fr       */
+/*   Updated: 2024/12/06 09:32:02 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
+# include <stdlib.h>
+# include <unistd.h>
+# include <stdint.h>
+
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE	42
 # endif
-
-# include <stdlib.h>
-# include <unistd.h>
-# include <fcntl.h>
-# include <stdio.h>
-# include <stdint.h>
 
 char	*next_line(int fd, char *line, char *buffer, int nl);
 char	*get_next_line(int fd);
